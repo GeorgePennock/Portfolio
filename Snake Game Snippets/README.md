@@ -1,4 +1,5 @@
 # Snake Game Snippets
+These are just snippets / examples of different parts of the project. There is not enough here to fully compile the game.
 
 ## Code Structure
 
@@ -37,6 +38,9 @@ All game logic and events are passed through the gamemode class, this lets me ea
 
 ## Element Class
 The element class is used as a base class for all the game's components to inherit from. Things such as the fruit, player and the background all inherit from element and can ovveride any virtual events to connect to different parts of the game loop. You can also override its drawing method and change how it draws itself, instead of just using the default shape drawing. 
+
+## Player Class
+The player is a controllable snake that draws itself by stamping multiple draw calls. Every peice of the body is a draw call, all using the same texture sheet but with a different UV rect.
 
 ## Fruit Class
 The fruit class is mainly just a stored position to check if the player has eaten it. It also has its own repostioning algorithm to avoid overlapping the player or other fruits.
