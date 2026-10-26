@@ -29,7 +29,7 @@ This is a generalised code structure, it does not contain a list of every existi
 **Element:** Base class for any parts of the game.\
 **Player:** Controller for the player.\
 **Fruit:** A collectable for the player.\
-**Background:** A drawable grid background with a dynamic size.\
+**Background:** A drawable grid background with a dynamic size.
 
 The Game runs a game loop which runs update and draw calls seperate for each object.
 
