@@ -1,52 +1,50 @@
-# Snake Game Snippets
-These are just snippets / examples of different parts of the project. There is not enough here to fully compile the game.
+# Tool Snippets (C#)
+These are just snippets / examples of different parts of the project.
 
-## Code Structure
+## Saveable Behaviours
+     SaveableBehaviour.cs
+     Entity.cs
+     Chunks.cs
+     GameSave.cs
+I created a system for saving an entire unity MonoBehaviour class using reflection. Inheriting from the SaveableBehaviour class allowed you to use the [Save] Attribute. Marking a property or variable with a SaveAttribute would cause it to be added to the class's save data.
 
-This is a generalised code structure, it does not contain a list of every existing class in the project.
+A saved class would store whatever parameters you specified, aswell as its type. You can then specify how a saved variable is loaded back into the world depending on its type. I made this to integrate into a chunking system, where I would deload regions of the map that are not near the player.
 
-    Game*
-        Resource* 
-        Audio*
-        GameMode*
-        GameModeSettings*
-        Combo*
-        UI*
-        Map*
-            Element*[]
-                Player*
-                Fruit*
-                Background*
+## Smart Enemies
+    LivingEntity.cs
+    SmartEntity.cs
+    EntityBrain.cs
+    EntityStateMachine.cs
 
-**Game:** Base class for the entire game.\
-**Resource:** Textures & Sound Files.\
-**Audio:** Plays audio in channels.\
-**GameMode:** Rules for the game and what to do on specific events.\
-**GameModeSettings:** Modifications for each game mode, such as how many fruit to spawn.\
-**Combo:** Controls scoring for when you pick up multiple fruit.\
-**UI:** Draws all text & menus to the screen.\
-**Map:** Container for all the parts of the game map.\
-**Element:** Base class for any parts of the game.\
-**Player:** Controller for the player.\
-**Fruit:** A collectable for the player.\
-**Background:** A drawable grid background with a dynamic size.\
+    CritterEntityBrain.cs
+    CritterEntityStateMachine.cs
+For one of our game projects, I wanted an easy and adaptable way of creating AI systems that can track the player and make decisions.
 
-The Game runs a game loop which runs update and draw calls seperate for each object.
+I went with a StateMachine setup split across a few different components. The SmartEntity would have a reference to an EntityBrain. The entity brain would contain an EntityStateMachine which was incharge of making all the decisions in relation to the entity. 
 
-## Gamemode Class
-All game logic and events are passed through the gamemode class, this lets me easily manipulate what to do depending on the specific rules of each gamemode, without having the project littered with IF statements. I can control what happens when fruit is picked up, every time the player moves, and lots of other events.
+The entity brain would be incharge of showing settings like how far away the player has to be. I've also linked an example implementation called the CritterEntity.
 
-## Element Class
-The element class is used as a base class for all the game's components to inherit from. Things such as the fruit, player and the background all inherit from element and can ovveride any virtual events to connect to different parts of the game loop. You can also override its drawing method and change how it draws itself, instead of just using the default shape drawing. 
+## Unity Editor Map Window
+     MapEditorWindow.cs
+I created alot of Unity Editor tools for level designers to use, hoping to streamline their development and make it easier to build the map.
 
-## Player Class
-The player is a controllable snake that draws itself by stamping multiple draw calls. Every peice of the body is a draw call, all using the same texture sheet but with a different UV rect.
+One of these systems was a Map Editor Window that let you pick specific chunks to load from a map overlay. Each part of the map was stored in its own scene file, making it hard to find and load the right parts of the map that you wanted. This system let you select each of these chunks from an image of what the map looked like.
+## Unity Editor Transform Tools
+     VineCurveEditorWindow.cs
+     PrefabScatterEditorWindow.cs
+I created lots of different transformation tools to use for level designers to easily place and populate enviroments in our game.
 
-## Fruit Class
-The fruit class is mainly just a stored position to check if the player has eaten it. It also has its own repostioning algorithm to avoid overlapping the player or other fruits.
+One system I made let you create a Line renderer and curve it with a custom height and arc, then bake that curve into a mesh.
 
-## UI Class
-The UI Class can hold arrays of UI elements, aswell as subpages to draw inside of itself. The subpage system lets you easily create layers of UI to back in and out of menus.
+Another system I made let you scatter and place items easily. Items had to be stored in a wrapper class where they were not instantiated yet, so it made it hard to place them down in batches. This tool handled it for you, and also allowed you to align it to the surface and randomly rotate placed items.
+# Tool Snippets (C++)
+These are just snippets / examples of different parts of the project.
 
-## Split Image Class
-The UI split image class its a custom drawn shape, which pushes the borders of an image to the sides and streches the interior using a custom vertex shape. Its mainly used in this project to make the pushable buttons any size.
+## Texture Atlasing
+     DrawSystem.hpp
+     DrawSystem.cpp
+I developed a small texture atlasing system which would automatically bunch textures into one main file. This would help reduce load of the GPU so that it doesnt have to change textures as often.
+
+You can also use this image for a singular draw call of unmoving images, which can combine hundreds of draw calls into a singular one, with the only caveat being that you cant move elements indivually anymore.
+
+(You can find the texture atlating within the DrawSystem, its implementation is located at the bottom of the .cpp file).
